@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="layout/layout :: head"></head>
+<body>
+
+<header th:replace="layout/layout :: header"></header>
+<div class="container py-4">
+    <div class="card bg-light">
+        <div class="card-header" th:text="${title}"></div>
+        <div class="card-body">
+
+            <h4 class="card-title">
+                <a class="btn btn-primary btn-xs" th:href="@{'/receipt/form/'+${customer.id}}"
+                   th:text="'create receipt'"></a>
+            </h4>
+
+            <img th:if="${#strings.length(customer.photo) > 0}" class="img-thumbnail rounded float-left"
+                 style="max-width: 25%;"
+                 th:src="@{'/uploads/'+ ${customer.photo}}" th:alt="${customer.photo}"/>
+
+            <ul class="list-group">
+                <li class="list-group-item" th:text="${customer.name}"></li>
+                <li class="list-group-item" th:text="${customer.lastName}"></li>
+                <li class="list-group-item" th:text="${customer.email}"></li>
+                <li class="list-group-item" th:text="${customer.createAt}"></li>
+            </ul>
+            <div th:if="${#lists.isEmpty(customer.receipts)}" class="alert alert-info my-4"
+                 th:text="'The client '+${customer.name}+' not have receipts'"></div>
+            <table th:if="${not #lists.isEmpty(customer.receipts)}" class="table table-bordered table-striped my-4">
+                <thead class="thead-inverse">
+                <tr>
+                    <th>Folio</th>
+                    <th>Description</th>
+                    <th>Date</th>
+                    <th>Total</th>
+                    <th>See</th>
+                    <th>Delete</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="receipt: ${customer.receipts}">
+                    <td th:text="${receipt.id}"></td>
+                    <td th:text="${receipt.description}"></td>
+                    <td th:text="${receipt.createAt}"></td>
+                    <td th:text="${receipt.total}"></td>
+                    <td><a class="btn btn-primary btn-sm" th:href="@{'/receipt/see/' + ${receipt.id}}"
+                           th:text="'Detail'"></a></td>
+                    <td><a class="btn btn-danger btn-sm" th:href="@{'/receipt/delete/' + ${receipt.id}}"
+                           th:text="'delete'"
+                           onclick="return confirm('Are you sure that you want delete the receipt?');"></a></td>
+                </tr>
+                </tbody>
+
+            </table>
+
+        </div>
+    </div>
+</div>
+
+<footer th:replace="layout/layout :: footer"></footer>
+
+</body>
+</html>
