@@ -49,6 +49,12 @@ public class CustomerServiceImpl implements ICustomerService{
     }
 
     @Override
+    @Transactional(readOnly = true)
+    public Customer fetchByIdWithReceipts(Long id) {
+        return customerDao.fetchByIdWithReceipts(id);
+    }
+
+    @Override
     @Transactional
     public void delete(Long id) {
       customerDao.deleteById(id);
@@ -81,5 +87,11 @@ public class CustomerServiceImpl implements ICustomerService{
     @Transactional
     public void deleteReceipt(Long id) {
      receiptDao.deleteById(id);
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public Receipt fetchReceiptByIdWithCustomerWithItemReceiptWithProduct(Long id) {
+        return receiptDao.fetchByIdWithCustomerWithItemReceiptWithProduct(id);
     }
 }

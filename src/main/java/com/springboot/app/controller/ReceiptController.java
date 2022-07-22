@@ -96,7 +96,7 @@ public class ReceiptController {
     @GetMapping("/see/{id}")
     public String see(@PathVariable("id") Long id, Model model, RedirectAttributes flash){
 
-        Receipt receipt = customerService.findReceiptById(id);
+        Receipt receipt = customerService.fetchReceiptByIdWithCustomerWithItemReceiptWithProduct(id);
 
         if(receipt==null){
             flash.addFlashAttribute("error","The receipt not exist into the databse");

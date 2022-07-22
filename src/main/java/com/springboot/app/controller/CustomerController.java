@@ -57,7 +57,7 @@ public class CustomerController {
     @GetMapping("/see/{id}")
     public String see(@PathVariable("id") Long id, Model model, RedirectAttributes flash) {
 
-        Customer customer = customerService.findById(id);
+        Customer customer = customerService.fetchByIdWithReceipts(id);
         if (customer == null) {
             flash.addFlashAttribute("error", "The customer not exist into the database");
             return "redirect:/list";
