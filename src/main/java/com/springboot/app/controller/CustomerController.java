@@ -13,6 +13,11 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.annotation.Secured;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.context.SecurityContext;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -24,6 +29,7 @@ import javax.validation.Valid;
 
 import java.io.IOException;
 import java.net.MalformedURLException;
+import java.util.Collection;
 
 
 @SessionAttributes("customer")
@@ -38,6 +44,7 @@ public class CustomerController {
     private final static String UPLOADS_FOLDER = "uploads";
 
 
+    @Secured("ROLE_USER")
     @GetMapping("/uploads/{filename:.+}")
     public ResponseEntity<Resource> seePhoto(@PathVariable String filename) {
 
@@ -54,6 +61,7 @@ public class CustomerController {
                 .body(resource);
     }
 
+    @Secured("ROLE_USER")
     @GetMapping("/see/{id}")
     public String see(@PathVariable("id") Long id, Model model, RedirectAttributes flash) {
 
@@ -66,9 +74,10 @@ public class CustomerController {
         model.addAttribute("title", "Customer detail: " + customer.getLastName());
         return "see";
     }
-
-    @GetMapping("/list")
+    @Secured("ROLE_USER")
+    @GetMapping({"/list","/"})
     public String list(@RequestParam(name = "page", defaultValue = "0") int page, Model model) {
+
         Pageable pageRequest = PageRequest.of(page, 5);
         Page<Customer> customers = customerService.findAll(pageRequest);
         PageRender<Customer> pageRender = new PageRender<>("/list", customers);
@@ -79,6 +88,7 @@ public class CustomerController {
         return "list";
     }
 
+    @Secured("ROLE_ADMIN")
     @GetMapping("/form")
     public String create(Model model) {
         Customer customer = new Customer();
@@ -86,7 +96,7 @@ public class CustomerController {
         model.addAttribute("title", "Form to create a customer");
         return "form";
     }
-
+    @Secured("ROLE_ADMIN")
     @GetMapping("/form/{id}")
     public String edit(@PathVariable("id") Long id, Model model, RedirectAttributes flash) {
         Customer customer = null;
@@ -104,7 +114,7 @@ public class CustomerController {
         model.addAttribute("title", "Edit customer");
         return "form";
     }
-
+    @Secured("ROLE_ADMIN")
     @PostMapping("/form")
     public String create(@Valid Customer customer, BindingResult result, RedirectAttributes flash, Model model,
                          @RequestParam("file") MultipartFile photo) {
@@ -140,7 +150,7 @@ public class CustomerController {
         flash.addFlashAttribute("success", message);
         return "redirect:list";
     }
-
+    @Secured("ROLE_ADMIN")
     @GetMapping("/delete/{id}")
     public String delete(@PathVariable("id") Long id, RedirectAttributes flash) {
 
@@ -155,5 +165,27 @@ public class CustomerController {
 
         }
         return "redirect:/list";
+    }
+
+    private boolean hasRole(String role){
+        SecurityContext context = SecurityContextHolder.getContext();
+        if(context==null){
+            return false;
+        }
+        Authentication authentication = context.getAuthentication();
+
+        if(authentication==null){
+            return false;
+        }
+
+        Collection<? extends GrantedAuthority> authorities = authentication.getAuthorities();
+
+        for (GrantedAuthority authority: authorities) {
+            if(role.equals(authority.getAuthority())){
+                return true;
+            }
+            
+        }
+        return false;
     }
 }

@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head th:replace="layout/layout :: head"></head>
 <body>
 
@@ -12,36 +12,37 @@
         <div class="card-body">
 
     <h4 class="card-title">
-        <a th:href="@{/form}" class="btn btn-primary btn-xs">Create customer</a>
+        <a sec:authorize="hasRole('ROLE_ADMIN')" th:href="@{/form}" class="btn btn-primary btn-xs">Create customer</a>
     </h4>
-    <table class="table">
-        <thead>
+    <table class="table table-striped table-bordered">
+        <thead class="thead-inverse">
         <tr>
-            <th>id</th>
+            <th sec:authorize="hasRole('ROLE_USER')">id</th>
             <th>name</th>
             <th>last name</th>
             <th>email</th>
             <th>date</th>
-            <th>create receipt</th>
-            <th>edit</th>
-            <th>delete</th>
+            <th sec:authorize="hasRole('ROLE_ADMIN')">create receipt</th>
+            <th sec:authorize="hasRole('ROLE_ADMIN')">edit</th>
+            <th sec:authorize="hasRole('ROLE_ADMIN')">delete</th>
         </tr>
         </thead>
         <tbody>
         <tr th:each="customer: ${customers}">
-            <td><a class="btn btn-primary btn-xs" th:href="@{/see/} + ${customer.id}"  th:text="${customer.id}"></a></td>
+            <td sec:authorize="hasRole('ROLE_USER')"><a class="btn btn-primary btn-xs" th:href="@{/see/} + ${customer.id}"  th:text="${customer.id}"></a></td>
             <td th:text="${customer.name}"></td>
             <td th:text="${customer.lastName}"></td>
             <td th:text="${customer.email}"></td>
             <td th:text="${customer.createAt}"></td>
-            <td><a class="btn btn-success btn-xs" th:href="@{'/receipt/form/'+${customer.id}}" th:text="'create receipt'"></a></td>
-            <td><a class="btn btn-primary btn-xs" th:href="@{/form/} + ${customer.id}">edit</a></td>
-            <td><a class="btn btn-primary btn-xs" th:href="@{/delete/} + ${customer.id}"
+            <td sec:authorize="hasRole('ROLE_ADMIN')"><a class="btn btn-success btn-xs" th:href="@{'/receipt/form/'+${customer.id}}" th:text="'create receipt'"></a></td>
+            <td sec:authorize="hasRole('ROLE_ADMIN')"><a class="btn btn-primary btn-xs" th:href="@{/form/} + ${customer.id}">edit</a></td>
+            <td sec:authorize="hasRole('ROLE_ADMIN')"><a class="btn btn-primary btn-xs" th:href="@{/delete/} + ${customer.id}"
                    onclick="return confirm('are you sure you want delete this customer');">delete</a></td>
         </tr>
         </tbody>
     </table>
             <nav th:replace="paginator-nav :: pagination"></nav>
+
 </div>
 <footer th:replace="layout/layout :: footer"></footer>
 </body>
