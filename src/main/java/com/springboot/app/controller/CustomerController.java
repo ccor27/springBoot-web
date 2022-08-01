@@ -6,6 +6,7 @@ import com.springboot.app.service.ICustomerService;
 import com.springboot.app.service.IUploadFileService;
 import com.springboot.app.util.paginator.PageRender;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.MessageSource;
 import org.springframework.core.io.Resource;
 
 import org.springframework.data.domain.Page;
@@ -30,6 +31,7 @@ import javax.validation.Valid;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.util.Collection;
+import java.util.Locale;
 
 
 @SessionAttributes("customer")
@@ -42,6 +44,8 @@ public class CustomerController {
     private IUploadFileService iUploadFileService;
 
     private final static String UPLOADS_FOLDER = "uploads";
+    @Autowired
+    private MessageSource  messageSource;
 
 
     @Secured("ROLE_USER")
@@ -76,13 +80,13 @@ public class CustomerController {
     }
     @Secured("ROLE_USER")
     @GetMapping({"/list","/"})
-    public String list(@RequestParam(name = "page", defaultValue = "0") int page, Model model) {
+    public String list(@RequestParam(name = "page", defaultValue = "0") int page, Model model, Locale locale) {
 
         Pageable pageRequest = PageRequest.of(page, 5);
         Page<Customer> customers = customerService.findAll(pageRequest);
         PageRender<Customer> pageRender = new PageRender<>("/list", customers);
 
-        model.addAttribute("title", "List of customers");
+        model.addAttribute("title",messageSource.getMessage("text.customer.list",null,locale));
         model.addAttribute("customers", customers);
         model.addAttribute("page", pageRender);
         return "list";

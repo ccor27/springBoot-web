@@ -18,10 +18,10 @@
         <thead class="thead-inverse">
         <tr>
             <th sec:authorize="hasRole('ROLE_USER')">id</th>
-            <th>name</th>
-            <th>last name</th>
-            <th>email</th>
-            <th>date</th>
+            <th th:text="#{text.customer.name}">name</th>
+            <th th:text="#{text.customer.lastName}">last name</th>
+            <th th:text="#{text.customer.email}">email</th>
+            <th th:text="#{text.customer.createAt}">date</th>
             <th sec:authorize="hasRole('ROLE_ADMIN')">create receipt</th>
             <th sec:authorize="hasRole('ROLE_ADMIN')">edit</th>
             <th sec:authorize="hasRole('ROLE_ADMIN')">delete</th>
