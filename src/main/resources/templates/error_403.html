@@ -8,10 +8,10 @@
 <div class="container py-4">
 
     <div class="card bg-danger text-white">
-        <div class="card-header">Error: access denied</div>
+        <div class="card-header" th:text="#{text.security.error.403.title}"></div>
         <div class="card-body">
-        <h5 class="card-title">Sorry <span th:text="${#authentication.name}"></span>, You Don't have permission</h5>
-            <a th:href="@{/list}" class="btn btn-outline-light" role="button">Go to beginning</a>
+        <h5 class="card-title" th:utext="#{text.security.error.403.permission(${#authentication.name})}"></h5>
+            <a th:href="@{/list}" class="btn btn-outline-light" role="button" th:text="#{text.security.error.403.back}"></a>
         </div>
         <div></div>
     </div>

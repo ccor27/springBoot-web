@@ -3,6 +3,7 @@
 <head th:replace="layout/layout :: head"></head>
 <body>
 
+<div id="i18n_delete_customer" th:text="#{text.customer.deleteOk}" style="display: none;"></div>
 <header th:replace="layout/layout :: header"></header>
 
 <div class="container py-4">
@@ -11,39 +12,50 @@
         <div class="card-header" th:text="${title}"></div>
         <div class="card-body">
 
-    <h4 class="card-title">
-        <a sec:authorize="hasRole('ROLE_ADMIN')" th:href="@{/form}" class="btn btn-primary btn-xs">Create customer</a>
-    </h4>
-    <table class="table table-striped table-bordered">
-        <thead class="thead-inverse">
-        <tr>
-            <th sec:authorize="hasRole('ROLE_USER')">id</th>
-            <th th:text="#{text.customer.name}">name</th>
-            <th th:text="#{text.customer.lastName}">last name</th>
-            <th th:text="#{text.customer.email}">email</th>
-            <th th:text="#{text.customer.createAt}">date</th>
-            <th sec:authorize="hasRole('ROLE_ADMIN')">create receipt</th>
-            <th sec:authorize="hasRole('ROLE_ADMIN')">edit</th>
-            <th sec:authorize="hasRole('ROLE_ADMIN')">delete</th>
-        </tr>
-        </thead>
-        <tbody>
-        <tr th:each="customer: ${customers}">
-            <td sec:authorize="hasRole('ROLE_USER')"><a class="btn btn-primary btn-xs" th:href="@{/see/} + ${customer.id}"  th:text="${customer.id}"></a></td>
-            <td th:text="${customer.name}"></td>
-            <td th:text="${customer.lastName}"></td>
-            <td th:text="${customer.email}"></td>
-            <td th:text="${customer.createAt}"></td>
-            <td sec:authorize="hasRole('ROLE_ADMIN')"><a class="btn btn-success btn-xs" th:href="@{'/receipt/form/'+${customer.id}}" th:text="'create receipt'"></a></td>
-            <td sec:authorize="hasRole('ROLE_ADMIN')"><a class="btn btn-primary btn-xs" th:href="@{/form/} + ${customer.id}">edit</a></td>
-            <td sec:authorize="hasRole('ROLE_ADMIN')"><a class="btn btn-primary btn-xs" th:href="@{/delete/} + ${customer.id}"
-                   onclick="return confirm('are you sure you want delete this customer');">delete</a></td>
-        </tr>
-        </tbody>
-    </table>
+            <h4 class="card-title">
+                <a sec:authorize="hasRole('ROLE_ADMIN')" th:href="@{/form}" class="btn btn-primary btn-xs"
+                   th:text="#{text.customer.create}"></a>
+            </h4>
+            <table class="table table-striped table-bordered">
+                <thead class="thead-inverse">
+                <tr>
+                    <th sec:authorize="hasRole('ROLE_USER')">id</th>
+                    <th th:text="#{text.customer.name}">name</th>
+                    <th th:text="#{text.customer.lastName}">last name</th>
+                    <th th:text="#{text.customer.email}">email</th>
+                    <th th:text="#{text.customer.createAt}">date</th>
+                    <th sec:authorize="hasRole('ROLE_ADMIN')">create receipt</th>
+                    <th sec:authorize="hasRole('ROLE_ADMIN')">edit</th>
+                    <th sec:authorize="hasRole('ROLE_ADMIN')">delete</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="customer: ${customers}">
+                    <td sec:authorize="hasRole('ROLE_USER')"><a class="btn btn-primary btn-xs"
+                                                                th:href="@{/see/} + ${customer.id}"
+                                                                th:text="${customer.id}"></a></td>
+                    <td th:text="${customer.name}"></td>
+                    <td th:text="${customer.lastName}"></td>
+                    <td th:text="${customer.email}"></td>
+                    <td th:text="${customer.createAt}"></td>
+                    <td sec:authorize="hasRole('ROLE_ADMIN')"><a class="btn btn-success btn-xs"
+                                                                 th:href="@{'/receipt/form/'+${customer.id}}"
+                                                                 th:text="#{text.customer.receipt.create}"></a></td>
+                    <td sec:authorize="hasRole('ROLE_ADMIN')"><a class="btn btn-primary btn-xs"
+                                                                 th:href="@{/form/} + ${customer.id}"
+                                                                 th:text="#{text.customer.edit}"></a></td>
+                    <td sec:authorize="hasRole('ROLE_ADMIN')"><a class="btn btn-primary btn-xs"
+                                                                 th:href="@{/delete/} + ${customer.id}"
+                                                                 th:text="#{text.customer.delete}"
+                                                                 onclick="return confirm(document.getElementById('i18n_delete_customer').innerHTML);"></a>
+                    </td>
+
+                </tr>
+                </tbody>
+            </table>
             <nav th:replace="paginator-nav :: pagination"></nav>
 
-</div>
-<footer th:replace="layout/layout :: footer"></footer>
+        </div>
+        <footer th:replace="layout/layout :: footer"></footer>
 </body>
 </html>

@@ -6,12 +6,15 @@
 <header th:replace="layout/layout :: header"></header>
 <div class="container py-4">
     <div class="card bg-light">
-        <div class="card-header" th:text="${title}"></div>
+
+        <div id="i18n_delete_receipt" th:text="#{text.customer.receipt.deleteOk}" style="display: none;"></div>
+
+        <div class="card-header" th:text="${title} +': '+ ${customer.name}" ></div>
         <div class="card-body">
 
             <h4 class="card-title">
                 <a sec:authorize="hasRole('ROLE_ADMIN')" class="btn btn-primary btn-xs" th:href="@{'/receipt/form/'+${customer.id}}"
-                   th:text="'create receipt'"></a>
+                   th:text="#{text.customer.receipt.create }"></a>
             </h4>
 
             <img th:if="${#strings.length(customer.photo) > 0}" class="img-thumbnail rounded float-left"
@@ -25,16 +28,16 @@
                 <li class="list-group-item" th:text="${customer.createAt}"></li>
             </ul>
             <div th:if="${#lists.isEmpty(customer.receipts)}" class="alert alert-info my-4"
-                 th:text="'The client '+${customer.name}+' not have receipts'"></div>
+                 th:text="#{text.customer.detail.no.receipts}"></div>
             <table th:if="${not #lists.isEmpty(customer.receipts)}" class="table table-bordered table-striped my-4">
                 <thead class="thead-inverse">
                 <tr>
-                    <th>Folio</th>
-                    <th>Description</th>
-                    <th>Date</th>
-                    <th>Total</th>
-                    <th sec:authorize="hasRole('ROLE_ADMIN')">See</th>
-                    <th sec:authorize="hasRole('ROLE_ADMIN')">Delete</th>
+                    <th th:utext="#{text.customer.receipt.folio}">Folio</th>
+                    <th th:utext="#{text.customer.receipt.description}">Description</th>
+                    <th th:utext="#{text.customer.receipt.date}">Date</th>
+                    <th th:utext="#{text.customer.receipt.total}">Total</th>
+                    <th sec:authorize="hasRole('ROLE_ADMIN')" th:utext="#{text.customer.receipt.detail}">See</th>
+                    <th sec:authorize="hasRole('ROLE_ADMIN')" th:utext="#{text.customer.receipt.delete}">Delete</th>
                 </tr>
                 </thead>
                 <tbody>
@@ -44,10 +47,10 @@
                     <td th:text="${receipt.createAt}"></td>
                     <td th:text="${receipt.total}"></td>
                     <td sec:authorize="hasRole('ROLE_ADMIN')"><a class="btn btn-primary btn-sm" th:href="@{'/receipt/see/' + ${receipt.id}}"
-                           th:text="'Detail'"></a></td>
+                                                                 th:utext="#{text.customer.receipt.detail}"></a></td>
                     <td sec:authorize="hasRole('ROLE_ADMIN')"><a class="btn btn-danger btn-sm" th:href="@{'/receipt/delete/' + ${receipt.id}}"
-                           th:text="'delete'"
-                           onclick="return confirm('Are you sure that you want delete the receipt?');"></a></td>
+                                                                 th:utext="#{text.customer.receipt.delete}"
+                           onclick="return confirm(document.getElementById('i18n_delete_receipt').innerHTML);"></a></td>
                 </tr>
                 </tbody>
 
