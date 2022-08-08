@@ -1,5 +1,7 @@
 package com.springboot.app.model.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 import javax.persistence.*;
 
 @Entity
@@ -12,6 +14,7 @@ public class ItemReceipt {
     private Integer amount;
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name ="product_id")
+    @JsonIgnoreProperties({"hibernateLazyInitializer","handler"})
     private Product product;
 
     public Long getId() {

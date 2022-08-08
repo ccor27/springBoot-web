@@ -20,7 +20,7 @@ import java.awt.*;
 import java.util.Locale;
 import java.util.Map;
 
-@Component("receipt/see")
+@Component("receipt/see.pdf")
 public class ReceiptPdfView extends AbstractPdfView {
 
     @Autowired
