@@ -37,3 +37,11 @@ INSERT INTO receipt_items (amount,receipt_id,product_id) VALUES(1,1,3)
 
 INSERT INTO receipts (description,comment,customer_id,create_at) VALUES('Bike receipt','the bike have one year of guarantee',1,NOW());
 INSERT INTO receipt_items (amount,receipt_id,product_id) VALUES(3,2,5)
+
+/* created users */
+INSERT INTO users (username,password,enabled) VALUES ('camilo','$2a$10$fvA5nOWZX2EHFohF8L8wv.LjHKFV60eLwmTn65YOZ5Waa3P3lJKX6',true);
+INSERT INTO users (username,password,enabled) VALUES ('samuel','$2a$10$sThG0gG5u.Wnz5Z5n7Jr9erluoPv.SywShFFLYNM3KLIlP0UrPIMW',true);
+
+INSERT INTO authorities (user_id,authority) VALUES (1,'ROLE_USER');
+INSERT INTO authorities (user_id,authority) VALUES (2,'ROLE_ADMIN');
+INSERT INTO authorities (user_id,authority) VALUES (2,'ROLE_USER');

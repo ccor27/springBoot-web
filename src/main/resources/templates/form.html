@@ -20,7 +20,7 @@
             <form th:action="@{/form}" th:object="${customer}" method="post" enctype="multipart/form-data">
 
                 <div class="form-group row">
-                    <label class="col-sm-2 col-form-label">Name</label>
+                    <label class="col-sm-2 col-form-label" th:text="#{text.customer.name}"></label>
                     <div class="col-sm-6">
                         <input type="text" th:field="*{name}" class="form-control"
                                th:errorclass="'form-control alert-danger'"/>
@@ -29,7 +29,7 @@
                     </div>
                 </div>
                 <div class="form-group row">
-                    <label class="col-sm-2 col-form-label">Last name</label>
+                    <label class="col-sm-2 col-form-label" th:text="#{text.customer.lastName}"></label>
                     <div class="col-sm-6">
                         <input type="text" th:field="*{lastName}" class="form-control"
                                th:errorclass="'form-control alert-danger'"/>
@@ -38,7 +38,7 @@
                     </div>
                 </div>
                 <div class="form-group row">
-                    <label class="col-sm-2 col-form-label">Email</label>
+                    <label class="col-sm-2 col-form-label" th:text="#{text.customer.email}"></label>
                     <div class="col-sm-6">
                         <input type="text" th:field="*{email}" class="form-control"
                                th:errorclass="'form-control alert-danger'"/>
@@ -47,7 +47,7 @@
                     </div>
                 </div>
                 <div class="form-group row">
-                    <label class="col-sm-2 col-form-label">Date</label>
+                    <label class="col-sm-2 col-form-label" th:text="#{text.customer.createAt}"></label>
                     <div class="col-sm-6">
                         <input type="text" class="form-control" th:field="*{createAt}"
                                th:errorclass="'form-control alert-danger'"/>
@@ -57,7 +57,7 @@
                 </div>
 
                 <div class="form-group row">
-                    <label class="col-sm-2 col-form-label">photo</label>
+                    <label class="col-sm-2 col-form-label" th:text="#{text.customer.photo}"></label>
                     <div class="col-sm-6">
                         <input type="file" name="file" class="form-control" />
                     </div>
@@ -65,7 +65,7 @@
 
                 <div class="form-group">
                     <div class="col-sm-4">
-                        <input type="submit" value="Create customer" class="btn btn-primary"/>
+                        <input type="submit" th:value="${title}" class="btn btn-primary"/>
                     </div>
                 </div>
                 <input type="hidden" th:field="*{id}"/>
