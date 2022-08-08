@@ -1,5 +1,7 @@
 package com.springboot.app.controller;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -7,27 +9,31 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.security.Principal;
+import java.util.Locale;
 
 @Controller
 public class LoginController {
 
+    @Autowired
+    private MessageSource messageSource;
+
     @GetMapping("/login")
     public String login(@RequestParam(value = "error", required = false) String error
-                        ,@RequestParam(value = "logout", required = false) String logout
+                        , @RequestParam(value = "logout", required = false) String logout
             , Model model
-            , Principal principal, RedirectAttributes flash){
+            , Principal principal, RedirectAttributes flash, Locale locale){
 
         if(principal!=null){
-            flash.addFlashAttribute("info","you are already logged in");
+            flash.addFlashAttribute("info",messageSource.getMessage("text.login.already",null,locale));
             return "redirect:/list";
         }
 
         if(error!=null){
-            model.addAttribute("error", "Error: the username or password is incorrect, please try again.");
+            model.addAttribute("error", messageSource.getMessage("text.login.error",null,locale));
         }
 
         if(logout!=null){
-            model.addAttribute("success", "logout successful.");
+            model.addAttribute("success", messageSource.getMessage("text.login.logout",null,locale));
         }
 
         return "login";

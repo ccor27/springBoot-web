@@ -67,18 +67,17 @@ public class CustomerController {
 
     @Secured("ROLE_USER")
     @GetMapping("/see/{id}")
-    public String see(@PathVariable("id") Long id, Model model, RedirectAttributes flash) {
+    public String see(@PathVariable("id") Long id, Model model, RedirectAttributes flash,  Locale locale) {
 
         Customer customer = customerService.fetchByIdWithReceipts(id);
         if (customer == null) {
-            flash.addFlashAttribute("error", "The customer not exist into the database");
+            flash.addFlashAttribute("error", messageSource.getMessage("text.customer.flash.db.error",null,locale));
             return "redirect:/list";
         }
         model.addAttribute("customer", customer);
-        model.addAttribute("title", "Customer detail: " + customer.getLastName());
+        model.addAttribute("title",  messageSource.getMessage("text.customer.detail.title",null,locale));
         return "see";
     }
-    @Secured("ROLE_USER")
     @GetMapping({"/list","/"})
     public String list(@RequestParam(name = "page", defaultValue = "0") int page, Model model, Locale locale) {
 
@@ -94,37 +93,37 @@ public class CustomerController {
 
     @Secured("ROLE_ADMIN")
     @GetMapping("/form")
-    public String create(Model model) {
+    public String create(Model model,Locale locale) {
         Customer customer = new Customer();
         model.addAttribute("customer", customer);
-        model.addAttribute("title", "Form to create a customer");
+        model.addAttribute("title", messageSource.getMessage("text.customer.form.title",null,locale));
         return "form";
     }
     @Secured("ROLE_ADMIN")
     @GetMapping("/form/{id}")
-    public String edit(@PathVariable("id") Long id, Model model, RedirectAttributes flash) {
+    public String edit(@PathVariable("id") Long id, Model model, RedirectAttributes flash,Locale locale) {
         Customer customer = null;
         if (id > 0) {
             customer = customerService.findById(id);
             if (customer == null) {
-                flash.addFlashAttribute("error", "The ID not exist into the DataBase");
+                flash.addFlashAttribute("error", messageSource.getMessage("text.customer.flash.db.error",null,locale));
                 return "redirect:/list";
             }
         } else {
-            flash.addFlashAttribute("error", "The ID cant not be zero");
+            flash.addFlashAttribute("error", messageSource.getMessage("text.customer.flash.id.error",null,locale));
             return "redirect:/list";
         }
         model.addAttribute("customer", customer);
-        model.addAttribute("title", "Edit customer");
+        model.addAttribute("title", messageSource.getMessage("text.customer.form.title.edit",null,locale));
         return "form";
     }
     @Secured("ROLE_ADMIN")
     @PostMapping("/form")
     public String create(@Valid Customer customer, BindingResult result, RedirectAttributes flash, Model model,
-                         @RequestParam("file") MultipartFile photo) {
+                         @RequestParam("file") MultipartFile photo, Locale locale) {
 
         if (result.hasErrors()) {
-            model.addAttribute("title", "Form to create a customer");
+            model.addAttribute("title", messageSource.getMessage("text.customer.form.title",null,locale));
             return "form";
         }
 
@@ -143,28 +142,28 @@ public class CustomerController {
                 throw new RuntimeException(e);
             }
 
-            flash.addFlashAttribute("info", "You upload photo '" + uniqueFileName + "' successful");
+            flash.addFlashAttribute("info", messageSource.getMessage("text.customer.flash.photo.goUp.success", null, locale) + "'" + uniqueFileName + "'");
 
             customer.setPhoto(uniqueFileName);
 
         }
 
-        String message = (customer.getId() != null) ? "Customer edited successful" : "Customer created successful";
+        String message = (customer.getId() != null) ? messageSource.getMessage("text.customer.flash.edit.success", null, locale) : messageSource.getMessage("text.customer.flash.create.success", null, locale);
         customerService.save(customer);
         flash.addFlashAttribute("success", message);
         return "redirect:list";
     }
     @Secured("ROLE_ADMIN")
     @GetMapping("/delete/{id}")
-    public String delete(@PathVariable("id") Long id, RedirectAttributes flash) {
+    public String delete(@PathVariable("id") Long id, RedirectAttributes flash,Locale locale) {
 
         if (id > 0) {
             Customer customer = customerService.findById(id);
             customerService.delete(id);
-            flash.addFlashAttribute("success", "Customer deleted successful");
+            flash.addFlashAttribute("success", messageSource.getMessage("text.customer.flash.delete.success",null,locale));
 
             if (iUploadFileService.delete(customer.getPhoto())) {
-                flash.addFlashAttribute("info", "photo: " + customer.getPhoto() + " deleted successful");
+                flash.addFlashAttribute("info", messageSource.getMessage("text.customer.flash.photo.delete.success ",null,locale));
             }
 
         }

@@ -1,7 +1,10 @@
 package com.springboot.app.model.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
 import javax.persistence.*;
 import javax.validation.constraints.NotEmpty;
+import javax.xml.bind.annotation.XmlTransient;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -19,6 +22,7 @@ public class Receipt {
     @Column(name = "create_at")
     private Date createAt;
     @ManyToOne(fetch = FetchType.LAZY)
+    @JsonBackReference
     private Customer customer;
 
     @OneToMany(fetch = FetchType.LAZY,cascade = CascadeType.ALL)
@@ -66,6 +70,7 @@ public class Receipt {
         this.createAt = createAt;
     }
 
+    @XmlTransient
     public Customer getCustomer() {
         return customer;
     }
@@ -87,11 +92,6 @@ public class Receipt {
     }
 
     public Double getTotal(){
-        /*Double total =0.0;
-        int size = items.size();
-        for (int i=0;i<size;i++){
-            total+=items.get(i).calculateAmount();
-        }*/
          return items.stream().mapToDouble(ItemReceipt::calculateAmount).sum();
     }
 }
