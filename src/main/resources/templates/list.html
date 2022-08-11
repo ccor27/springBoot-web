@@ -27,9 +27,9 @@
                     <th th:text="#{text.customer.lastName}">last name</th>
                     <th th:text="#{text.customer.email}">email</th>
                     <th th:text="#{text.customer.createAt}">date</th>
-                    <th sec:authorize="hasRole('ROLE_ADMIN')">create receipt</th>
-                    <th sec:authorize="hasRole('ROLE_ADMIN')">edit</th>
-                    <th sec:authorize="hasRole('ROLE_ADMIN')">delete</th>
+                    <th sec:authorize="hasRole('ROLE_ADMIN')" th:text="#{text.customer.receipt.create}">create receipt</th>
+                    <th sec:authorize="hasRole('ROLE_ADMIN')" th:text="#{text.customer.edit}">edit</th>
+                    <th sec:authorize="hasRole('ROLE_ADMIN')" th:text="#{text.customer.receipt.delete}">delete</th>
                 </tr>
                 </thead>
                 <tbody>
